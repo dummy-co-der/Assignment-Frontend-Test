@@ -61,7 +61,7 @@ const TopBar = () => {
       <div className="lg:w-1/10 mt-7">
         <Button
           variant="contained"
-          size="large"
+          size="small"
           className="bg-blue-500 text-white rounded-md text-xs"
         >
           Search
