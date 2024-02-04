@@ -16,6 +16,12 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import { visuallyHidden } from "@mui/utils";
 import { headCells, rows } from "../data/tableContent";
+import Pagination from "@mui/material/Pagination";
+import CustomDropdown from "@/utils/customDropdown";
+import { category } from "@/data/dropdownOptions";
+import { Button, useMediaQuery } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -76,7 +82,6 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align="left"
-            // align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -109,25 +114,110 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+  const { numSelected, page, setPage, count, rowsPerPage } = props;
+  const isLargeScreen = useMediaQuery("(min-width: 1024px)");
+  const isMediumScreen = useMediaQuery("(min-width: 768px)");
+
+  const handleChangePage = (event, value) => {
+    setPage(value - 1);
+  };
 
   return (
-    <Toolbar
-      className={`pl-${numSelected > 0 ? "2" : "1"} pr-${
-        numSelected > 0 ? "1" : "1"
-      } ${numSelected > 0 ? `bg-opacity-${alpha(0.12)}` : ""}`}
-    >
-      <Typography
-        variant="h6"
-        id="tableTitle"
-        component="div"
-        className="font-bold flex-1 flex-shrink-1 flex-grow-1"
-      >
-        Product Summary
-      </Typography>
-    </Toolbar>
+    <>
+      {isMediumScreen ? (
+        <div className="lg:gap-4 md:gap-2 flex md:flex-row flex-col items-center m-4 pt-4">
+          <Typography
+            variant={isMediumScreen ? "h6" : "p"}
+            id="tableTitle"
+            component="div"
+            className="font-bold flex-1 flex-shrink-1 flex-grow-1"
+          >
+            {isLargeScreen ? "Product Summary" : "Summary"}
+          </Typography>
+          <Typography className="font-bold text-md">Show</Typography>
+          <div className="w-1/6">
+            <CustomDropdown
+              labelClassName="font-bold"
+              id="category"
+              placeholder="ALL COLUMN"
+              size="small"
+              getOptionLabel={(option) => option?.category}
+              isOptionEqualToValue={(option, value) =>
+                option?.category === value?.category
+              }
+              options={category}
+              onChange={undefined}
+            />
+          </div>
+          <Button
+            variant="contained"
+            size={isLargeScreen ? "large" : "small"}
+            className="bg-blue-500 text-white rounded-md mt-1 text-xs"
+          >
+            DISPATCH SELECTED
+          </Button>
+          <Pagination
+            count={Math.ceil(count / rowsPerPage)}
+            page={page + 1}
+            onChange={handleChangePage}
+            shape="rounded"
+            sx={{ padding: 0, width: isLargeScreen ? "29%" : "50%" }}
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col mb-4 pt-3 items-center">
+          <Typography
+            variant="h6"
+            id="tableTitle"
+            component="div"
+            className="font-bold flex-1 flex-shrink-1 flex-grow-1"
+          >
+            Product Summary
+          </Typography>
+          <div className="flex flex-row items-center w-[70%] gap-2 mb-2">
+            <Typography className="font-bold text-md">Show</Typography>
+            <div className="w-full">
+              <CustomDropdown
+                labelClassName="font-bold"
+                id="category"
+                placeholder="ALL COLUMN"
+                size="small"
+                getOptionLabel={(option) => option?.category}
+                isOptionEqualToValue={(option, value) =>
+                  option?.category === value?.category
+                }
+                options={category}
+                onChange={undefined}
+              />
+            </div>
+          </div>
+          <Button
+            variant="contained"
+            size="large"
+            className="bg-blue-500 text-white rounded-md mt-1 text-xs mb-2"
+          >
+            DISPATCH SELECTED
+          </Button>
+          <Pagination
+            count={Math.ceil(count / rowsPerPage)}
+            page={page + 1}
+            onChange={handleChangePage}
+            shape="rounded"
+            sx={{ width: "100%" }}
+          />
+        </div>
+      )}
+    </>
   );
 }
+
+EnhancedTableToolbar.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -140,6 +230,7 @@ const ProductSummary = () => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const isMediumScreen = useMediaQuery("(min-width: 768px)");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -205,7 +296,13 @@ const ProductSummary = () => {
   return (
     <Box className="w-full mt-8">
       <Paper className="mb-2 w-full rounded-xl shadow-lg">
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          page={page}
+          setPage={setPage}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -262,6 +359,9 @@ const ProductSummary = () => {
                     <TableCell align="left">{row.shipping}</TableCell>
                     <TableCell align="left">{row.source}</TableCell>
                     <TableCell align="left">{row.orderType}</TableCell>
+                    <TableCell align="left">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -285,6 +385,10 @@ const ProductSummary = () => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            marginLeft: isMediumScreen ? "" : "-8px",
+            marginRight: isMediumScreen ? "" : "-8px",
+          }}
         />
       </Paper>
     </Box>

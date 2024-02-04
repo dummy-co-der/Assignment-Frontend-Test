@@ -3,6 +3,7 @@ import CustomDropdown from "@/utils/customDropdown";
 import { category, status } from "@/data/dropdownOptions";
 import { Button } from "@mui/material";
 import SearchInput from "@/utils/searchInput";
+import classNames from "@/utils/classNames";
 
 const TopBar = () => {
   return (
@@ -12,14 +13,16 @@ const TopBar = () => {
           placeholder="Search for category, name, company, etc."
           label="What are you looking for?"
           labelClassName="font-bold"
+          className={classNames('mt-1')}
         />
       </div>
       <div className="lg:w-1/5 md:w-1/5 w-2/3">
         <CustomDropdown
+          position="top"
           label="Category"
           labelClassName="font-bold"
           id="category"
-          placeholder="category"
+          placeholder="All"
           size="small"
           getOptionLabel={(option) => option?.category}
           isOptionEqualToValue={(option, value) =>
@@ -31,10 +34,11 @@ const TopBar = () => {
       </div>
       <div className="lg:w-1/5 md:w-1/5 w-2/3">
         <CustomDropdown
+          position="top"
           label="Status"
           labelClassName="font-bold"
           id="status"
-          placeholder="status"
+          placeholder="All"
           size="small"
           getOptionLabel={(option) => option?.status}
           isOptionEqualToValue={(option, value) =>
@@ -48,7 +52,7 @@ const TopBar = () => {
         <Button
           variant="contained"
           size="large"
-          className="bg-blue-500 text-white mt-6 rounded-md"
+          className="bg-blue-500 text-white mt-7 rounded-md text-xs"
         >
           Search
         </Button>

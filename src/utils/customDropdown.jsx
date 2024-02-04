@@ -5,7 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import classNames from "./classNames";
 
-export const StyledTextField = styled(TextField)(({ error }) => ({
+export const StyledTextField = styled(TextField)(({ error, small }) => ({
   "&.MuiTextField-root": {
     marginTop: "0.5rem",
     borderRadius: "0.5rem",
@@ -80,45 +80,54 @@ function CustomDropdown({
   isOptionEqualToValue,
   onClick,
   hideTags = false,
+  position,
   ...props
 }) {
   const sx = hideTags
     ? { ["& .MuiAutocomplete-tag"]: { display: "none" } }
     : {};
   return (
-    <div className="w-full">
-      <label className={classNames(labelClassName)}>{label}</label>
-      <Autocomplete
-        noOptionsText={noOptionsText ? noOptionsText : "No options"}
-        options={options}
-        value={value === "" ? null : value}
-        onChange={onChange}
-        onInputChange={onInputChange}
-        getOptionLabel={(option) => {
-          if (typeof option === "string") {
-            return option;
-          } else {
-            return getOptionLabel ? getOptionLabel(option) : option.label;
-          }
-        }}
-        isOptionEqualToValue={(option, value) => {
-          return isOptionEqualToValue
-            ? isOptionEqualToValue(option, value)
-            : option === value;
-        }}
-        renderInput={(params) => (
-          <StyledTextField
-            {...params}
-            sx={sx}
-            className={classNames(inputClassName)}
-            onClick={onClick}
-            placeholder={placeholder}
-            error={error ? true : false}
-          />
-        )}
-        PopperComponent={StyledPopper}
-        {...props}
-      />
+    <div
+      className={`flex ${
+        position === "left" ? "flex-row items-center" : "flex-col"
+      }`}
+    >
+      <div>
+        <label className={classNames(labelClassName)}>{label}</label>
+      </div>
+      <div>
+        <Autocomplete
+          noOptionsText={noOptionsText ? noOptionsText : "No options"}
+          options={options}
+          value={value === "" ? null : value}
+          onChange={onChange}
+          onInputChange={onInputChange}
+          getOptionLabel={(option) => {
+            if (typeof option === "string") {
+              return option;
+            } else {
+              return getOptionLabel ? getOptionLabel(option) : option.label;
+            }
+          }}
+          isOptionEqualToValue={(option, value) => {
+            return isOptionEqualToValue
+              ? isOptionEqualToValue(option, value)
+              : option === value;
+          }}
+          renderInput={(params) => (
+            <StyledTextField
+              {...params}
+              className={classNames(inputClassName)}
+              sx={sx}
+              onClick={onClick}
+              placeholder={placeholder}
+              error={error ? true : false}
+            />
+          )}
+          PopperComponent={StyledPopper}
+          {...props}
+        />
+      </div>
     </div>
   );
 }
