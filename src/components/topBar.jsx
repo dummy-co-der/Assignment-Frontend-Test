@@ -18,7 +18,7 @@ const TopBar = () => {
 
   return (
     <div className="lg:gap-8 md:gap-2 flex flex-wrap items-center justify-center flex-col md:flex-row bg-white p-5 px-0 md:px-2 rounded-3xl shadow-lg">
-      <div className="lg:w-2/5 pt-1">
+      <div className="lg:w-2/5">
         <SearchInput
           placeholder="Search for category, name, company, etc."
           label="What are you looking for?"
@@ -58,11 +58,11 @@ const TopBar = () => {
           onChange={handleStatusChange}
         />
       </div>
-      <div className="lg:w-1/10">
+      <div className="lg:w-1/10 mt-7">
         <Button
           variant="contained"
           size="large"
-          className="bg-blue-500 text-white mt-7 rounded-md text-xs"
+          className="bg-blue-500 text-white rounded-md text-xs"
         >
           Search
         </Button>
