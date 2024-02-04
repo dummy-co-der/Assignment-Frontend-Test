@@ -149,7 +149,7 @@ function EnhancedTableToolbar(props) {
           </div>
           <Button
             variant="contained"
-            size={isLargeScreen ? "large" : "small"}
+            size="small"
             className="bg-blue-500 text-white rounded-md mt-1 text-xs"
           >
             DISPATCH SELECTED
@@ -198,7 +198,7 @@ function EnhancedTableToolbar(props) {
           </div>
           <Button
             variant="contained"
-            size="large"
+            size="small"
             className="bg-blue-500 text-white rounded-md mt-1 text-xs mb-2"
           >
             DISPATCH SELECTED

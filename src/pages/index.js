@@ -10,7 +10,7 @@ const index = () => {
         <h1 className="font-bold text-2xl">Orders</h1>
         <Button
           variant="contained"
-          size="large"
+          size="small"
           className="bg-blue-500 text-white rounded-md text-xs"
         >
           CREATE NEW
