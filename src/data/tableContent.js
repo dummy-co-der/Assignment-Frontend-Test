@@ -1,4 +1,3 @@
-// tableData.js
 export function createData(
   id,
   shippingId,
