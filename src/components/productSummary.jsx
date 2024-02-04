@@ -159,7 +159,14 @@ function EnhancedTableToolbar(props) {
             page={page + 1}
             onChange={handleChangePage}
             shape="rounded"
-            sx={{ padding: 0, width: isLargeScreen ? "29%" : "50%" }}
+            sx={{
+              padding: 0,
+              width: isLargeScreen ? "29%" : "50%",
+              "& .Mui-selected": {
+                backgroundColor: "#3B82F6",
+                color: "white",
+              },
+            }}
           />
         </div>
       ) : (
