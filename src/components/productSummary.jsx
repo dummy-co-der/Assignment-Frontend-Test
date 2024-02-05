@@ -110,9 +110,7 @@ function EnhancedTableToolbar(props) {
   const { page, setPage, count, rowsPerPage } = props;
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const isMediumScreen = useMediaQuery("(min-width: 768px)");
-  const [selectedColumn, setSelectedColumn] = useState({
-    columnsToDisplay: "ALL COLUMNS",
-  });
+  const [selectedColumn, setSelectedColumn] = useState("");
 
   const handleColumnsToShow = (event, value) => {
     setSelectedColumn(value);
