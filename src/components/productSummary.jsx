@@ -16,18 +16,13 @@ import { visuallyHidden } from "@mui/utils";
 import { headCells, rows } from "../data/tableContent";
 import Pagination from "@mui/material/Pagination";
 import CustomDropdown from "@/utils/customDropdown";
-import { category } from "@/data/dropdownOptions";
 import { Button, useMediaQuery } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
+  if (b[orderBy] < a[orderBy]) return -1;
+  if (b[orderBy] > a[orderBy]) return 1;
   return 0;
 }
 
@@ -115,7 +110,9 @@ function EnhancedTableToolbar(props) {
   const { page, setPage, count, rowsPerPage } = props;
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const isMediumScreen = useMediaQuery("(min-width: 768px)");
-  const [selectedColumn, setSelectedColumn] = useState(null);
+  const [selectedColumn, setSelectedColumn] = useState({
+    columnsToDisplay: "ALL COLUMNS",
+  });
 
   const handleColumnsToShow = (event, value) => {
     setSelectedColumn(value);
@@ -137,6 +134,9 @@ function EnhancedTableToolbar(props) {
         columnsToDisplay: headCell.label,
       })),
   ];
+  const filteredOptions = options.filter(
+    (option) => option.columnsToDisplay !== selectedColumn.columnsToDisplay
+  );
 
   return (
     <>
@@ -165,7 +165,7 @@ function EnhancedTableToolbar(props) {
               isOptionEqualToValue={(option, value) =>
                 option?.columnsToDisplay === value?.columnsToDisplay
               }
-              options={options}
+              options={filteredOptions}
               onChange={handleColumnsToShow}
             />
           </div>
@@ -217,7 +217,7 @@ function EnhancedTableToolbar(props) {
                 isOptionEqualToValue={(option, value) =>
                   option?.columnsToDisplay === value?.columnsToDisplay
                 }
-                options={options}
+                options={filteredOptions}
                 onChange={handleColumnsToShow}
               />
             </div>
@@ -305,13 +305,7 @@ const ProductSummary = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -323,6 +317,11 @@ const ProductSummary = () => {
       ),
     [order, orderBy, page, rowsPerPage]
   );
+  const [selectedColumns, setSelectedColumns] = useState(["ALL COLUMNS"]);
+
+  const handleColumnsToShow = (event, value) => {
+    setSelectedColumns(value.columnsToDisplay);
+  };
 
   return (
     <Box className="w-full mt-8">

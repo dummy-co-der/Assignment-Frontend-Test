@@ -480,5 +480,5 @@ export const headCells = [
     disablePadding: false,
     label: "ORDER TYPE",
   },
-  { id: "editIcon", numeric: true, disablePadding: false, label: "" },
+  { id: "editIcon", numeric: false, disablePadding: true, label: "" },
 ];
