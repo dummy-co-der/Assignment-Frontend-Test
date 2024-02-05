@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CustomDropdown from "@/utils/customDropdown";
 import { category, status } from "@/data/dropdownOptions";
 import { Button } from "@mui/material";
@@ -16,6 +16,20 @@ const TopBar = () => {
     setSelectedCategory(value);
   };
 
+  const filteredCategoryOptions = useMemo(() => {
+    return selectedCategory
+      ? category.filter(
+          (option) => option.category !== selectedCategory.category
+        )
+      : category;
+  }, [selectedCategory]);
+
+  const filteredStatusOptions = useMemo(() => {
+    return selectedStatus
+      ? status.filter((option) => option.status !== selectedStatus.status)
+      : status;
+  }, [selectedStatus]);
+
   return (
     <div className="lg:gap-8 md:gap-2 flex flex-wrap items-center justify-center flex-col md:flex-row bg-white p-5 px-0 md:px-2 rounded-3xl shadow-lg">
       <div className="lg:w-2/5">
@@ -32,13 +46,15 @@ const TopBar = () => {
           label="Category"
           labelClassName="font-bold"
           id="category"
-          placeholder={selectedCategory ? selectedCategory.category : "All"}
+          placeholder={
+            selectedCategory ? selectedCategory.category : "Select category"
+          }
           size="small"
           getOptionLabel={(option) => option?.category}
           isOptionEqualToValue={(option, value) =>
             option?.category === value?.category
           }
-          options={category}
+          options={filteredCategoryOptions}
           onChange={handleCategoryChange}
         />
       </div>
@@ -48,13 +64,13 @@ const TopBar = () => {
           label="Status"
           labelClassName="font-bold"
           id="status"
-          placeholder={selectedStatus ? selectedStatus.status : "All"}
+          placeholder={selectedStatus ? selectedStatus.status : "Select status"}
           size="small"
           getOptionLabel={(option) => option?.status}
           isOptionEqualToValue={(option, value) =>
             option?.status === value?.status
           }
-          options={status}
+          options={filteredStatusOptions}
           onChange={handleStatusChange}
         />
       </div>

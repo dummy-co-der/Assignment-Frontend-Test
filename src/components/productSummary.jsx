@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -115,10 +115,28 @@ function EnhancedTableToolbar(props) {
   const { page, setPage, count, rowsPerPage } = props;
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const isMediumScreen = useMediaQuery("(min-width: 768px)");
+  const [selectedColumn, setSelectedColumn] = useState(null);
+
+  const handleColumnsToShow = (event, value) => {
+    setSelectedColumn(value);
+  };
 
   const handleChangePage = (event, value) => {
     setPage(value - 1);
   };
+  const options = [
+    { columnsToDisplay: "ALL COLUMNS" },
+    ...headCells
+      .filter(
+        (headCell) =>
+          headCell.id !== "id" &&
+          headCell.id !== "shippingId" &&
+          headCell.label.trim() !== ""
+      )
+      .map((headCell) => ({
+        columnsToDisplay: headCell.label,
+      })),
+  ];
 
   return (
     <>
@@ -136,15 +154,19 @@ function EnhancedTableToolbar(props) {
           <div className="w-1/6">
             <CustomDropdown
               labelClassName="font-bold"
-              id="category"
-              placeholder="ALL COLUMN"
-              size="small"
-              getOptionLabel={(option) => option?.category}
-              isOptionEqualToValue={(option, value) =>
-                option?.category === value?.category
+              id="columnsToDisplay"
+              placeholder={
+                selectedColumn
+                  ? selectedColumn.columnsToDisplay
+                  : "Select columns"
               }
-              options={category}
-              onChange={undefined}
+              size="small"
+              getOptionLabel={(option) => option?.columnsToDisplay}
+              isOptionEqualToValue={(option, value) =>
+                option?.columnsToDisplay === value?.columnsToDisplay
+              }
+              options={options}
+              onChange={handleColumnsToShow}
             />
           </div>
           <Button
@@ -184,15 +206,19 @@ function EnhancedTableToolbar(props) {
             <div className="w-full">
               <CustomDropdown
                 labelClassName="font-bold"
-                id="category"
-                placeholder="ALL COLUMN"
-                size="small"
-                getOptionLabel={(option) => option?.category}
-                isOptionEqualToValue={(option, value) =>
-                  option?.category === value?.category
+                id="columnsToDisplay"
+                placeholder={
+                  selectedColumn
+                    ? selectedColumn.columnsToDisplay
+                    : "Select columns"
                 }
-                options={category}
-                onChange={undefined}
+                size="small"
+                getOptionLabel={(option) => option?.columnsToDisplay}
+                isOptionEqualToValue={(option, value) =>
+                  option?.columnsToDisplay === value?.columnsToDisplay
+                }
+                options={options}
+                onChange={handleColumnsToShow}
               />
             </div>
           </div>

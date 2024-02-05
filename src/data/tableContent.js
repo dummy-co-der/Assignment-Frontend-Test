@@ -467,7 +467,7 @@ export const headCells = [
     disablePadding: false,
     label: "SHIPPING ID",
   },
-  { id: "date", numeric: true, disablePadding: false, label: "Date" },
+  { id: "date", numeric: true, disablePadding: false, label: "DATE" },
   { id: "status", numeric: true, disablePadding: false, label: "STATUS" },
   { id: "customer", numeric: true, disablePadding: false, label: "CUSTOMER" },
   { id: "email", numeric: true, disablePadding: false, label: "EMAIL" },
